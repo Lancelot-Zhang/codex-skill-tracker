@@ -136,7 +136,7 @@ Run these checks with the selected Python command:
 ```json
 {
   "continue": true,
-  "systemMessage": "本轮使用 Skill · 0 | 无"
+  "systemMessage": "Skills used · 0 | None"
 }
 ```
 

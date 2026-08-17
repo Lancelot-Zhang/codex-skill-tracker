@@ -411,7 +411,7 @@ class CodexSkillTrackerHookTests(unittest.TestCase):
         )
         self.assertEqual(
             response,
-            {"continue": True, "systemMessage": "本轮使用 Skill · 0 | 无"},
+            {"continue": True, "systemMessage": "Skills used · 0 | None"},
         )
 
     def test_missing_transcript_is_distinct_from_zero(self) -> None:
@@ -427,7 +427,7 @@ class CodexSkillTrackerHookTests(unittest.TestCase):
             response,
             {
                 "continue": True,
-                "systemMessage": "本轮使用 Skill · ? | 追踪不可用",
+                "systemMessage": "Skills used · ? | Tracking unavailable",
             },
         )
 
@@ -443,14 +443,14 @@ class CodexSkillTrackerHookTests(unittest.TestCase):
         )
         self.assertEqual(
             response,
-            {"continue": True, "systemMessage": "本轮使用 Skill · 0 | 无"},
+            {"continue": True, "systemMessage": "Skills used · 0 | None"},
         )
 
     def test_footer_format(self) -> None:
-        self.assertEqual(format_footer([]), "本轮使用 Skill · 0 | 无")
+        self.assertEqual(format_footer([]), "Skills used · 0 | None")
         self.assertEqual(
             format_footer(["openai-docs", "playwright"]),
-            "本轮使用 Skill · 2 | openai-docs | playwright",
+            "Skills used · 2 | openai-docs | playwright",
         )
 
 
