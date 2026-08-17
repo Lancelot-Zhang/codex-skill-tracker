@@ -9,8 +9,10 @@ Codex Skill Tracker 是一个适用于 Codex Desktop 和 Codex CLI 的轻量级�
 指令的 Skill。
 
 ```text
-本轮使用 Skill · 2 | openai-docs | skill-creator
+Skills used · 2 | openai-docs | skill-creator
 ```
+
+为保持不同界面的显示一致，Hook 状态行统一使用简洁的英文标签。
 
 该结果由 Hook 根据 transcript 生成，并非由模型回忆得出。在 Codex Desktop
 中，正常回答会保持展开，Skill 统计结果可通过回答下方的 Hook 详情按钮查看。

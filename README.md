@@ -9,8 +9,10 @@ CLI. It inspects the current turn transcript and reports Skills whose
 `SKILL.md` instructions were successfully loaded.
 
 ```text
-本轮使用 Skill · 2 | openai-docs | skill-creator
+Skills used · 2 | openai-docs | skill-creator
 ```
+
+The compact status line uses the same English label in every interface.
 
 The Hook generates this result from the transcript rather than asking the
 model to recall its activity. In Codex Desktop, the normal answer remains
