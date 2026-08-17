@@ -324,12 +324,12 @@ def detect_used_skills(transcript_path: Path, turn_id: str) -> list[str]:
 
 def format_footer(skills: list[str]) -> str:
     if not skills:
-        return "本轮使用 Skill · 0 | 无"
-    return f"本轮使用 Skill · {len(skills)} | " + " | ".join(skills)
+        return "Skills used · 0 | None"
+    return f"Skills used · {len(skills)} | " + " | ".join(skills)
 
 
 def _error_footer() -> str:
-    return "本轮使用 Skill · ? | 追踪不可用"
+    return "Skills used · ? | Tracking unavailable"
 
 
 def build_hook_response(event: dict[str, Any]) -> dict[str, Any]:
