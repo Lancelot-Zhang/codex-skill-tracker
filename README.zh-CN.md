@@ -230,10 +230,6 @@ README.md                          英文文档
 脱敏 transcript fixture、期望 Skill 列表、实际输出、Codex 客户端、操作系统和
 Python 版本。新增行为应同时添加回归测试。
 
-## 上游来源与许可证
-
-本仓库源自
-[GODGOD126/codex-skill-tracker](https://github.com/GODGOD126/codex-skill-tracker)。
-重新分发修改版本时，请保留上游署名。
+## 许可证
 
 本项目采用 [MIT License](LICENSE)。

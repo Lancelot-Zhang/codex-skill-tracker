@@ -245,10 +245,6 @@ smallest redacted transcript fixture that reproduces the issue, the expected
 Skill list, the actual output, the Codex client, operating system, and Python
 version. New behavior should include regression tests.
 
-## Upstream and license
-
-This repository originated from
-[GODGOD126/codex-skill-tracker](https://github.com/GODGOD126/codex-skill-tracker).
-Please retain upstream attribution when redistributing modified versions.
+## License
 
 Released under the [MIT License](LICENSE).
