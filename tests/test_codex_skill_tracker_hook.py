@@ -56,6 +56,40 @@ def function_output(
     )
 
 
+def custom_tool_call(
+    call_id: str,
+    code: str,
+    *,
+    turn_id: str = TURN_ID,
+    name: str = "exec",
+) -> dict:
+    return response_item(
+        {
+            "type": "custom_tool_call",
+            "name": name,
+            "input": code,
+            "call_id": call_id,
+        },
+        turn_id,
+    )
+
+
+def custom_tool_output(
+    call_id: str,
+    output: object,
+    *,
+    turn_id: str = TURN_ID,
+) -> dict:
+    return response_item(
+        {
+            "type": "custom_tool_call_output",
+            "call_id": call_id,
+            "output": output,
+        },
+        turn_id,
+    )
+
+
 class CodexSkillTrackerHookTests(unittest.TestCase):
     def setUp(self) -> None:
         self.temp_dir = tempfile.TemporaryDirectory()
@@ -186,6 +220,52 @@ class CodexSkillTrackerHookTests(unittest.TestCase):
             ]
         )
         self.assertEqual(self.detect(), ["openai-docs"])
+
+    def test_code_mode_exec_sed_skill_read_is_reported(self) -> None:
+        self.write_rows(
+            [
+                custom_tool_call(
+                    "call-1",
+                    "const result = await tools.exec_command({"
+                    "cmd: \"sed -n '1,240p' "
+                    "/Users/me/.codex/skills/openai-docs/SKILL.md\""
+                    "}); text(result.output);",
+                ),
+                custom_tool_output(
+                    "call-1",
+                    [
+                        {
+                            "type": "text",
+                            "text": (
+                                "---\nname: openai-docs\n"
+                                "description: docs\n---\nBody"
+                            ),
+                        }
+                    ],
+                ),
+            ]
+        )
+        self.assertEqual(self.detect(), ["openai-docs"])
+
+    def test_glob_skill_paths_are_not_reported(self) -> None:
+        for pattern in ("*/SKILL.md", "**/SKILL.md"):
+            with self.subTest(pattern=pattern):
+                self.write_rows(
+                    [
+                        custom_tool_call(
+                            "call-1",
+                            "const result = await tools.exec_command({"
+                            f"cmd: \"sed -n '1,20p' "
+                            f"/Users/me/.codex/skills/{pattern}\""
+                            "}); text(result.output);",
+                        ),
+                        custom_tool_output(
+                            "call-1",
+                            [{"type": "text", "text": "Skill files found"}],
+                        ),
+                    ]
+                )
+                self.assertEqual(self.detect(), [])
 
     def test_failed_read_is_not_reported(self) -> None:
         self.write_rows(

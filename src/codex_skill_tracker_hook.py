@@ -17,8 +17,9 @@ SKILL_FILE_PATTERN = re.compile(r"(?i)(?:^|[\\/])SKILL\.md\b")
 READ_OPERATION_PATTERN = re.compile(
     r"""(?ix)
     \bget-content\b
-    |(?:^|[\s;&|])gc(?:\.exe)?(?:\s|$)
-    |(?:^|[\s;&|])cat(?:\.exe)?(?:\s|$)
+    |(?:^|[\s;&|"'`])gc(?:\.exe)?(?:\s|$)
+    |(?:^|[\s;&|"'`])cat(?:\.exe)?(?:\s|$)
+    |(?:^|[\s;&|"'`])sed(?:\.exe)?(?:\s|$)
     |\bread(?:_file|file|text|_text|mcp_resource)?\b
     |\breadfilesync\b
     |\bskills?\.read\b
@@ -46,6 +47,9 @@ PATH_PATTERN = re.compile(
         [^\s"'`|;<>]*SKILL\.md
     )
     """
+)
+PATH_DERIVED_SKILL_NAME_PATTERN = re.compile(
+    r"^[A-Za-z0-9][A-Za-z0-9._-]*$"
 )
 INJECTED_SKILL_PATTERN = re.compile(
     r"(?is)<skill>(?P<body>.*?)</skill>"
@@ -199,7 +203,11 @@ def _path_names(tool_input: str) -> list[str]:
         if len(parts) < 2:
             continue
         name = parts[-2].strip()
-        if name and name.lower() not in {"skills", ".agents"} and name not in names:
+        if (
+            PATH_DERIVED_SKILL_NAME_PATTERN.fullmatch(name)
+            and name.lower() not in {"skills", ".agents"}
+            and name not in names
+        ):
             names.append(name)
     return names
 
