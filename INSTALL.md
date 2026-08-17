@@ -1,16 +1,17 @@
 # Codex Skill Tracker installation contract
 
-This document is written for Codex to execute. The human user should be able to
-provide only this document URL and ask Codex to install, verify, upgrade, or
-uninstall the Hook.
+This document is an execution contract for Codex. Use it from a local checkout
+or an immutable tagged release so the contract and source belong to the same
+revision.
 
-Release described by this document: `v0.1.0`
-
-Source file:
+Source file relative to this document:
 
 ```text
-https://raw.githubusercontent.com/GODGOD126/codex-skill-tracker/v0.1.0/src/codex_skill_tracker_hook.py
+src/codex_skill_tracker_hook.py
 ```
+
+Before installation, record the repository owner and exact Git tag or commit.
+Never combine `INSTALL.md` from one revision with source from another.
 
 ## Safety requirements
 
@@ -21,11 +22,13 @@ Follow all of these requirements:
 3. Back up an existing `hooks.json` before changing it.
 4. Merge JSON structurally. Do not use string replacement.
 5. Install only inside the user's Codex home directory.
-6. Use the exact tagged source URL above, not a mutable branch.
+6. Use the source from the same checkout, Git tag, or commit as this document.
 7. Do not disable Hook review, trust prompts, sandboxing, or other safety
    controls.
 8. If the configuration is malformed or the correct Codex home cannot be
    determined safely, stop and report the exact problem.
+9. Do not add a `statusMessage`; the tracker should display only its final
+   `Skills used` result.
 
 ## Installation
 
@@ -51,7 +54,13 @@ Run the selected interpreter with `--version`. Stop if it is missing or older
 than Python 3.10. Record the exact executable and arguments because the Hook
 configuration must use the same command.
 
-### 3. Download the tagged source
+### 3. Review and stage the matching source
+
+For a local checkout, read and copy
+`src/codex_skill_tracker_hook.py` from that checkout. For a remote installation,
+use immutable raw URLs for `INSTALL.md` and the source file from the same
+repository and tag or commit. Do not silently switch owners, branches, tags, or
+commits.
 
 Create this directory under the resolved Codex home:
 
@@ -59,14 +68,15 @@ Create this directory under the resolved Codex home:
 hooks/codex-skill-tracker/
 ```
 
-Download the tagged source file to:
+Copy or download the reviewed source file to:
 
 ```text
 hooks/codex-skill-tracker/codex_skill_tracker_hook.py
 ```
 
-Read the downloaded file and confirm it matches the reviewed source. Do not
-execute content fetched from any other host or revision.
+Read the installed file and confirm it matches the reviewed source. If only a
+mutable branch is available, tell the user that the installation is not pinned
+and obtain approval before continuing.
 
 ### 4. Back up and merge Hook configuration
 
@@ -101,15 +111,16 @@ Append exactly one Stop entry in this shape:
     {
       "type": "command",
       "command": "<selected-python-command> <absolute-installed-script-path>",
-      "timeout": 5,
-      "statusMessage": "正在统计本轮使用的 Skill"
+      "timeout": 5
     }
   ]
 }
 ```
 
 JSON-escape the command and absolute path correctly for the current operating
-system. Quote executable and script paths when they contain spaces.
+system. Quote executable and script paths when they contain spaces. Do not add
+a `statusMessage`; only the final `systemMessage` returned by the script should
+be shown.
 
 Before appending, search existing Stop Hook commands for
 `codex_skill_tracker_hook.py`. If one already exists, update that entry in
@@ -147,6 +158,7 @@ backup.
 
 Tell the user:
 
+- The installed source tag or commit
 - The installed script path
 - The configuration path
 - The backup path, if one was created
@@ -159,9 +171,11 @@ new Codex task has completed.
 
 ## Upgrade
 
-For an upgrade, read the new tagged installation document first. Replace only
-the installed `codex_skill_tracker_hook.py`, keep the existing Hook entry,
-repeat all verification checks, and report the old and new versions.
+For an upgrade, read `INSTALL.md` and the source from the same target tag or
+commit. Replace only the installed `codex_skill_tracker_hook.py`, keep the
+existing Hook entry, repeat all verification checks, and report the old and new
+source revisions. Do not retain an extra copy of the old script unless the user
+explicitly requests one; the configuration backup is handled separately.
 
 ## Uninstall
 
